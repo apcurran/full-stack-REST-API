@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 // Import routes
+const userRouter = require("./api/routes/user");
 
 // DB Setup
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -30,6 +31,10 @@ app.use((req, res, next) => {
 
     next();
 });
+
+// Routes
+app.use("/user", userRouter);
+
 // Handle 404 Error
 app.use((req, res, next) => {
     const error = new Error("Not found");
