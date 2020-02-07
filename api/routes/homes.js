@@ -66,6 +66,25 @@ router.post("/new", async (req, res, next) => {
     }
 });
 
+// PATCH an existing home
+router.patch("/:homeId", async (req, res, next) => {
+    try {
+        const updatedHome = await House.findByIdAndUpdate(req.params.homeId, { $set: { street: req.body.street } });
+
+        res.json({
+            message: "Home updated!"
+        });
+    } catch (err) {
+        console.error(err);
+        res.json({
+            message: err
+        });
+
+        next(err);
+    }
+});
+
+// DELTE an existing home
 router.delete("/:homeId", async (req, res, next) => {
     try {
         const removedHome = await House.findByIdAndRemove(req.params.homeId);
