@@ -43,6 +43,10 @@ router.post("/signup", async (req, res, next) => {
 
     } catch (err) {
         console.error(err);
+        res.json({
+            message: err
+        });
+        
         next(err);
     }
 });

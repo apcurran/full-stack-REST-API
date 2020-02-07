@@ -8,6 +8,7 @@ require("dotenv").config();
 
 // Import routes
 const userRouter = require("./api/routes/user");
+const homesRouter = require("./api/routes/homes");
 
 // DB Setup
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use("/user", userRouter);
+app.use("/homes", homesRouter);
 
 // Handle 404 Error
 app.use((req, res, next) => {
