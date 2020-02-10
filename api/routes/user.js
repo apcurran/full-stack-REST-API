@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
 router.post("/signup", async (req, res, next) => {    
     const emailExists = await User.findOne({ email: req.body.email });
@@ -61,6 +62,7 @@ router.post("/signup", async (req, res, next) => {
 });
 
 router.post("/login", async (req, res) => {
+    // Check if user exists
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
@@ -78,9 +80,9 @@ router.post("/login", async (req, res) => {
         });
     }
 
-    res.json({
-        message: "Logged in"
-    });
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
+
+    res.header("authToken", token).json(token);
 });
 
 module.exports = router;
