@@ -4,8 +4,17 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
-router.post("/signup", async (req, res, next) => {
-    try {
+router.post("/signup", async (req, res, next) => {    
+    const emailExists = await User.findOne({ email: req.body.email });
+
+    if (emailExists) {
+        return res.status(400).json({
+            message: "Email already exists"
+        });
+    }
+
+    try { 
+
         // Hash password
         const saltRounds = 12;
         const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
@@ -49,6 +58,29 @@ router.post("/signup", async (req, res, next) => {
         
         next(err);
     }
+});
+
+router.post("/login", async (req, res) => {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+        return res.status(400).json({
+            message: "Email not found"
+        });
+    }
+
+    // Check password
+    const validPassword = await bcrypt.compare(req.body.password, user.password);
+
+    if (!validPassword) {
+        return res.status(400).json({
+            message: "Authorization failed"
+        });
+    }
+
+    res.json({
+        message: "Logged in"
+    });
 });
 
 module.exports = router;

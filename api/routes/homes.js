@@ -3,6 +3,19 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const House = require("../models/House");
+const { check, validationResult } = require("express-validator");
+const checkAuth = require("../middleware/check-auth");
+
+function validate(validations) {
+    return async (req, res, next) => {
+        await Promise.all(validations.map(validation => validation.run(req)));
+        const errors = validationResult(req);
+
+        if (errors.isEmpty()) return next();
+
+        res.status(422).json({ errors: errors.array() });
+    }
+}
 
 // GET all homes
 router.get("/", async (req, res, next) => {
@@ -37,7 +50,18 @@ router.get("/:homeId", async (req, res, next) => {
 });
 
 // POST to create a new home
-router.post("/new", async (req, res, next) => {
+router.post("/new", checkAuth, validate([
+    // Validate req data
+    check("street").notEmpty().escape(),
+    check("city").notEmpty().escape(),
+    check("state").notEmpty().escape(),
+    check("zip").notEmpty().escape(),
+    check("bedrooms").notEmpty().escape().isNumeric(),
+    check("bathrooms").notEmpty().escape().isNumeric(),
+    check("squareFeet").notEmpty().escape().isNumeric(),
+    check("description").notEmpty().escape(),
+    check("agent").notEmpty().escape()
+]), async (req, res, next) => {
     try {
         const home = new House({
             street: req.body.street,
