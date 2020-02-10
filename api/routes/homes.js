@@ -51,6 +51,7 @@ router.get("/:homeId", async (req, res, next) => {
 
 // POST to create a new home
 router.post("/new", checkAuth, validate([
+
     // Validate req data
     check("street").notEmpty().escape(),
     check("city").notEmpty().escape(),
@@ -61,6 +62,7 @@ router.post("/new", checkAuth, validate([
     check("squareFeet").notEmpty().escape().isNumeric(),
     check("description").notEmpty().escape(),
     check("agent").notEmpty().escape()
+    
 ]), async (req, res, next) => {
     try {
         const home = new House({
@@ -91,7 +93,7 @@ router.post("/new", checkAuth, validate([
 });
 
 // PATCH an existing home
-router.patch("/:homeId", async (req, res, next) => {
+router.patch("/:homeId", checkAuth, async (req, res, next) => {
     try {
         const updatedHome = await House.findByIdAndUpdate(req.params.homeId, { $set: { street: req.body.street } });
 
@@ -109,7 +111,7 @@ router.patch("/:homeId", async (req, res, next) => {
 });
 
 // DELTE an existing home
-router.delete("/:homeId", async (req, res, next) => {
+router.delete("/:homeId", checkAuth, async (req, res, next) => {
     try {
         const removedHome = await House.findByIdAndRemove(req.params.homeId);
 

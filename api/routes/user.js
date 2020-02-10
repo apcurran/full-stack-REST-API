@@ -4,8 +4,28 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const { check, validationResult } = require("express-validator");
 
-router.post("/signup", async (req, res, next) => {    
+function validate(validations) {
+    return async (req, res, next) => {
+        await Promise.all(validations.map(validation => validation.run(req)));
+        const errors = validationResult(req);
+
+        if (errors.isEmpty()) return next();
+
+        res.status(422).json({ errors: errors.array() });
+    }
+}
+
+router.post("/signup", validate([
+
+    // Validate req data
+    check("name").notEmpty().escape(),
+    check("email").notEmpty().escape(),
+    check("password").notEmpty().escape(),
+    check("secret").escape()
+
+]), async (req, res, next) => {    
     const emailExists = await User.findOne({ email: req.body.email });
 
     if (emailExists) {
@@ -61,7 +81,13 @@ router.post("/signup", async (req, res, next) => {
     }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", validate([
+
+    // Validate req data
+    check("email").notEmpty().escape(),
+    check("password").notEmpty().escape()
+
+]), async (req, res) => {
     // Check if user exists
     const user = await User.findOne({ email: req.body.email });
 
