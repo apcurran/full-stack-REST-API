@@ -1,3 +1,5 @@
+"use strict";
+
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
@@ -96,7 +98,7 @@ router.post("/login", validate([
         });
     }
 
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, { expiresIn: "1d" });
 
     res.header("authToken", token).json(token);
 });

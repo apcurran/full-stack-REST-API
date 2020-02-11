@@ -1,7 +1,8 @@
+"use strict";
+
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 const House = require("../models/House");
 const { check } = require("express-validator");
 const checkAuth = require("../middleware/check-auth");
