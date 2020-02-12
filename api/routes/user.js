@@ -22,7 +22,7 @@ router.post("/signup", validate([
 
     if (emailExists) {
         return res.status(400).json({
-            message: "Email already exists"
+            error: "Email already exists"
         });
     }
 
@@ -66,7 +66,7 @@ router.post("/signup", validate([
     } catch (err) {
         console.error(err);
         res.json({
-            message: err
+            error: err
         });
         
         next(err);
@@ -79,38 +79,48 @@ router.post("/login", validate([
     check("email").notEmpty().escape(),
     check("password").notEmpty().trim().escape()
 
-]), async (req, res) => {
+]), async (req, res, next) => {
     // Check if user exists
-    const user = await User.findOne({ email: req.body.email });
 
-    if (!user) {
-        return res.status(400).json({
-            message: "Email not found"
+    try {
+        
+        const user = await User.findOne({ email: req.body.email });
+    
+        if (!user) {
+            return res.status(400).json({
+                error: "Email not found"
+            });
+        }
+    
+        const validPassword = await bcrypt.compare(req.body.password, user.password);
+    
+        if (!validPassword) {
+            return res.status(400).json({
+                error: "Authorization failed"
+            });
+        }
+    
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    
+        // Remove password before sending back to client
+        const moddedUser = {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            admin: user.admin
+        }
+    
+        res.json({
+            token,
+            moddedUser
         });
+
+
+    } catch (err) {
+        console.error(err);
+        next(err);
     }
 
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
-
-    if (!validPassword) {
-        return res.status(400).json({
-            message: "Authorization failed"
-        });
-    }
-
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, { expiresIn: "1d" });
-
-    // Remove password before sending back to client
-    const moddedUser = {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        admin: user.admin
-    }
-
-    res.header("authToken", token).json({
-        token,
-        moddedUser
-    });
 });
 
 module.exports = router;
