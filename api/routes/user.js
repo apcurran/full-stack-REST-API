@@ -14,8 +14,8 @@ router.post("/signup", validate([
     // Validate req data
     check("name").notEmpty().escape(),
     check("email").notEmpty().escape(),
-    check("password").notEmpty().escape(),
-    check("secret").escape()
+    check("password").notEmpty().trim().escape(),
+    check("secret").trim().escape()
 
 ]), async (req, res, next) => {    
     const emailExists = await User.findOne({ email: req.body.email });
@@ -77,7 +77,7 @@ router.post("/login", validate([
 
     // Validate req data
     check("email").notEmpty().escape(),
-    check("password").notEmpty().escape()
+    check("password").notEmpty().trim().escape()
 
 ]), async (req, res) => {
     // Check if user exists
@@ -89,7 +89,6 @@ router.post("/login", validate([
         });
     }
 
-    // Check password
     const validPassword = await bcrypt.compare(req.body.password, user.password);
 
     if (!validPassword) {
@@ -100,7 +99,18 @@ router.post("/login", validate([
 
     const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, { expiresIn: "1d" });
 
-    res.header("authToken", token).json(token);
+    // Remove password before sending back to client
+    const moddedUser = {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        admin: user.admin
+    }
+
+    res.header("authToken", token).json({
+        token,
+        moddedUser
+    });
 });
 
 module.exports = router;
