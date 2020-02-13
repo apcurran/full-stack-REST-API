@@ -41,31 +41,45 @@ router.get("/:homeId", async (req, res, next) => {
 });
 
 // POST to create a new home
-router.post("/new", checkAuth, validate([
+router.post("/new", validate([
 
     // Validate req data
+    check("price").notEmpty().escape(),
     check("street").notEmpty().escape(),
     check("city").notEmpty().escape(),
     check("state").notEmpty().escape(),
     check("zip").notEmpty().escape(),
+    check("lat").notEmpty(),
+    check("lon").notEmpty(),
     check("bedrooms").notEmpty().escape().isNumeric(),
     check("bathrooms").notEmpty().escape().isNumeric(),
     check("squareFeet").notEmpty().escape().isNumeric(),
     check("description").notEmpty().escape(),
-    check("agent").notEmpty().escape()
+    check("agent").notEmpty().escape(),
+    check("agent_img").notEmpty(),
+    check("house_img_main").notEmpty(),
+    check("house_img_inside_1").notEmpty(),
+    check("house_img_inside_2").notEmpty()
 
 ]), async (req, res, next) => {
     try {
         const home = new House({
+            price: req.body.price,
             street: req.body.street,
             city: req.body.city,
             state: req.body.state,
             zip: req.body.zip,
+            lat: req.body.lat,
+            lon: req.body.lon,
             bedrooms: req.body.bedrooms,
             bathrooms: req.body.bathrooms,
             squareFeet: req.body.squareFeet,
             description: req.body.description,
-            agent: req.body.agent
+            agent: req.body.agent,
+            agent_img: req.body.agent_img,
+            house_img_main: req.body.house_img_main,
+            house_img_inside_1: req.body.house_img_inside_1,
+            house_img_inside_2: req.body.house_img_inside_2,
         });
 
         await home.save();
