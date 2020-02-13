@@ -27,7 +27,7 @@ async function populateDb() {
     try {
 
         for (let i = 0; i < 50; i++) {
-            const home = await new House({
+            const home = new House({
                 price: randomIntFromRange(150000, 600000),
                 street: faker.address.streetAddress(),
                 city: faker.address.city(),
