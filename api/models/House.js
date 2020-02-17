@@ -16,6 +16,7 @@ const HouseSchema = new mongoose.Schema({
     description: { type: String, required: true },
     agent: { type: String, required: true },
     agent_img: { type: String, required: true },
+    agent_phone: { type: String, required: true },
     house_img_main: { type: String, required: true },
     house_img_inside_1: { type: String, required: true },
     house_img_inside_2: { type: String, required: true },

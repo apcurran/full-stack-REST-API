@@ -57,6 +57,7 @@ router.post("/new", validate([
     check("description").notEmpty().escape(),
     check("agent").notEmpty().escape(),
     check("agent_img").notEmpty(),
+    check("agent_phone").notEmpty(),
     check("house_img_main").notEmpty(),
     check("house_img_inside_1").notEmpty(),
     check("house_img_inside_2").notEmpty()
@@ -77,6 +78,7 @@ router.post("/new", validate([
             description: req.body.description,
             agent: req.body.agent,
             agent_img: req.body.agent_img,
+            agent_phone: req.body.agent_phone,
             house_img_main: req.body.house_img_main,
             house_img_inside_1: req.body.house_img_inside_1,
             house_img_inside_2: req.body.house_img_inside_2,

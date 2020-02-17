@@ -26,7 +26,7 @@ function randomIntFromRange(low, high) {
 async function populateDb() {
     try {
 
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 75; i++) {
             const home = new House({
                 price: randomIntFromRange(150000, 600000),
                 street: faker.address.streetAddress(),
@@ -41,7 +41,8 @@ async function populateDb() {
                 description: faker.lorem.paragraph(),
                 agent: faker.name.findName(),
                 agent_img: faker.image.avatar(),
-                house_img_main: "https://source.unsplash.com/800x600/?house",
+                agent_phone: faker.phone.phoneNumberFormat(),
+                house_img_main: `https://source.unsplash.com/${randomIntFromRange(700, 900)}x${randomIntFromRange(600, 700)}/?house`,
                 house_img_inside_1: "https://source.unsplash.com/800x600/?kitchen,living",
                 house_img_inside_2: "https://source.unsplash.com/800x600/?kitchen,living",
             });
@@ -56,4 +57,4 @@ async function populateDb() {
     }
 }
 
-// populateDb();
+populateDb();
