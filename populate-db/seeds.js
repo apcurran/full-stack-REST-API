@@ -44,7 +44,7 @@ async function populateDb() {
                 agent_phone: faker.phone.phoneNumberFormat(),
                 house_img_main: `https://source.unsplash.com/${randomIntFromRange(700, 900)}x${randomIntFromRange(600, 700)}/?house`,
                 house_img_inside_1: "https://source.unsplash.com/800x600/?kitchen,living",
-                house_img_inside_2: "https://source.unsplash.com/800x600/?kitchen,living",
+                house_img_inside_2: "https://source.unsplash.com/799x600/?kitchen,living",
             });
     
             await home.save();
