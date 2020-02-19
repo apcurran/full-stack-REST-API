@@ -40,8 +40,10 @@ router.get("/:homeId", async (req, res, next) => {
     }
 });
 
+// AUTH protected routes
+
 // POST to create a new home
-router.post("/new", validate([
+router.post("/new", checkAuth, validate([
 
     // Validate req data
     check("price").notEmpty().escape(),

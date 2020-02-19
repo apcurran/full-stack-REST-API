@@ -96,7 +96,7 @@ router.post("/login", validate([
     
         if (!validPassword) {
             return res.status(400).json({
-                error: "Authorization failed"
+                error: "Password incorrect"
             });
         }
     
