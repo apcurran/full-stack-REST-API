@@ -122,11 +122,14 @@ router.patch("/:homeId", async (req, res, next) => {
 });
 
 // DELTE an existing home
-router.delete("/:homeId", checkAuth, async (req, res, next) => {
+router.delete("/delete", async (req, res, next) => {
     try {
-        const removedHome = await House.findByIdAndRemove(req.params.homeId);
+        const query = { street: req.body.streetQuery };
+        const removedHome = await House.findOneAndRemove(query);
 
-        res.json(removedHome);
+        res.json({
+            message: "Home deleted!"
+        });
     } catch (err) {
         console.error(err);
         res.json({
