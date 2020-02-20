@@ -8,6 +8,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { check } = require("express-validator");
 const validate = require("../middleware/validate");
+const checkAuth = require("../middleware/check-auth");
 
 router.post("/signup", validate([
 
@@ -121,6 +122,26 @@ router.post("/login", validate([
         next(err);
     }
 
+});
+
+router.get("/dashboard", checkAuth, async (req, res) => {
+    try {
+
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+        const moddedUser = {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            admin: user.admin
+        };
+
+        res.json(moddedUser);
+
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
 });
 
 module.exports = router;
