@@ -104,7 +104,8 @@ router.post("/new", checkAuth, validate([
 // PATCH an existing home
 router.patch("/:homeId", checkAuth, async (req, res, next) => {
     try {
-        const updatedHome = await House.findByIdAndUpdate(req.params.homeId, { $set: { street: req.body.street } });
+        const updateObject = req.body;
+        const updatedHome = await House.findByIdAndUpdate(req.params.homeId, { $set: updateObject });
 
         res.json({
             message: "Home updated!"
