@@ -102,11 +102,12 @@ router.post("/new", checkAuth, validate([
 });
 
 // PATCH an existing home
-router.patch("/:homeId", checkAuth, async (req, res, next) => {
+router.patch("/update", checkAuth, async (req, res, next) => {
     try {
         const query = { street: req.body.streetQuery };
         const updateObject = req.body;
-        const updatedHome = await House.findOneAndUpdate(query, { $set: updateObject });
+        
+        await House.findOneAndUpdate(query, { $set: updateObject });
 
         res.json({
             message: "Home updated!"
@@ -125,7 +126,8 @@ router.patch("/:homeId", checkAuth, async (req, res, next) => {
 router.delete("/delete", checkAuth, async (req, res, next) => {
     try {
         const query = { street: req.body.streetQuery };
-        const removedHome = await House.findOneAndRemove(query);
+
+        await House.findOneAndRemove(query);
 
         res.json({
             message: "Home deleted!"
