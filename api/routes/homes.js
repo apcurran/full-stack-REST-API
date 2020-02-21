@@ -94,7 +94,7 @@ router.post("/new", checkAuth, validate([
     } catch (err) {
         console.error(err);
         res.json({
-            message: err
+            error: err
         });
 
         next(err);
@@ -114,7 +114,7 @@ router.patch("/:homeId", checkAuth, async (req, res, next) => {
     } catch (err) {
         console.error(err);
         res.json({
-            message: err
+            error: err
         });
 
         next(err);
@@ -133,7 +133,7 @@ router.delete("/delete", checkAuth, async (req, res, next) => {
     } catch (err) {
         console.error(err);
         res.json({
-            message: err
+            error: err
         });
 
         next(err);
