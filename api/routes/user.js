@@ -187,7 +187,6 @@ router.post("/favorites", checkAuth, async (req, res, next) => {
 });
 
 router.delete("/favorites/:homeId", checkAuth, async (req, res, next) => {
-    console.log(req.params);
     try {
         
         const query = { user_id: req.user._id, home_id: req.params.homeId }
