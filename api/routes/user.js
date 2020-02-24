@@ -126,7 +126,7 @@ router.post("/login", validate([
 
 });
 
-router.get("/dashboard", checkAuth, async (req, res) => {
+router.get("/dashboard", checkAuth, async (req, res, next) => {
     try {
 
         const userId = req.user._id;
@@ -146,16 +146,20 @@ router.get("/dashboard", checkAuth, async (req, res) => {
     }
 });
 
-router.get("/favorites", checkAuth, async (req, res) => {
+router.get("/favorites", checkAuth, async (req, res, next) => {
     try {
         
+        const favoriteHomes = await FavoriteHome.find({ user_id: req.user._id });
+        
+        res.json(favoriteHomes);
+
     } catch (err) {
         console.error(err);
         next(err);
     }
 });
 
-router.post("/favorites", checkAuth, async (req, res) => {
+router.post("/favorites", checkAuth, async (req, res, next) => {
     try {
         
         const favoriteHome = new FavoriteHome({
@@ -174,6 +178,24 @@ router.post("/favorites", checkAuth, async (req, res) => {
 
         res.status(201).json({
             message: "House added to your dashboard favorites!"
+        });
+
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+});
+
+router.delete("/favorites/:homeId", checkAuth, async (req, res, next) => {
+    console.log(req.params);
+    try {
+        
+        const query = { user_id: req.user._id, home_id: req.params.homeId }
+
+        await FavoriteHome.findOneAndRemove(query);
+
+        res.json({
+            message: "Home deleted!"
         });
 
     } catch (err) {
