@@ -5,6 +5,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const FavoriteHome = require("../models/FavoriteHome");
 const jwt = require("jsonwebtoken");
 const { check } = require("express-validator");
 const validate = require("../middleware/validate");
@@ -58,6 +59,7 @@ router.post("/signup", validate([
             });
     
             await user.save();
+
             res.status(201).json({
                 message: "User created!"
             });
@@ -137,6 +139,42 @@ router.get("/dashboard", checkAuth, async (req, res) => {
         };
 
         res.json(moddedUser);
+
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+});
+
+router.get("/favorites", checkAuth, async (req, res) => {
+    try {
+        
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+});
+
+router.post("/favorites", checkAuth, async (req, res) => {
+    try {
+        
+        const favoriteHome = new FavoriteHome({
+            user_id: req.user._id,
+            home_id: req.body.home_id,
+            home_price: req.body.home_price,
+            home_street: req.body.home_street,
+            home_state: req.body.home_state,
+            home_bedrooms: req.body.home_bedrooms,
+            home_bathrooms: req.body.home_bathrooms,
+            home_squareFeet: req.body.home_squareFeet,
+            home_img_main: req.body.home_img_main
+        });
+
+        await favoriteHome.save();
+
+        res.status(201).json({
+            message: "House added to your dashboard favorites!"
+        });
 
     } catch (err) {
         console.error(err);

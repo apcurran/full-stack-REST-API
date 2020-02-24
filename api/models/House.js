@@ -3,7 +3,7 @@
 const mongoose = require("mongoose");
 
 const HouseSchema = new mongoose.Schema({
-    price : { type: Number, required: true },
+    price: { type: Number, required: true },
     street: { type: String, required: true },
     city: { type: String, required: true },
     state: { type: String, required: true },
