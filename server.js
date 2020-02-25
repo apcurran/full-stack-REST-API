@@ -17,8 +17,8 @@ mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "mongo connection error"));
 
-// Use Morgan for dev logging
 app.use(logger("dev"));
+app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Handle CORS

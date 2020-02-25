@@ -8,6 +8,7 @@ const { check } = require("express-validator");
 const checkAuth = require("../middleware/check-auth");
 const validate = require("../middleware/validate");
 const paginatedResults = require("../middleware/paginatedResults");
+const multer = require("multer");
 
 // GET all homes
 router.get("/", paginatedResults(House), async (req, res, next) => {
