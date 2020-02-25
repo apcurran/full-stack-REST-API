@@ -7,21 +7,11 @@ const House = require("../models/House");
 const { check } = require("express-validator");
 const checkAuth = require("../middleware/check-auth");
 const validate = require("../middleware/validate");
+const paginatedResults = require("../middleware/paginatedResults");
 
 // GET all homes
-router.get("/", async (req, res, next) => {
-    try {
-        const allHomes = await House.find();
-
-        res.status(200).json(allHomes);
-    } catch (err) {
-        console.error(err);
-        res.json({
-            message: err
-        });
-
-        next(err);
-    }
+router.get("/", paginatedResults(House), async (req, res, next) => {
+    res.status(200).json(res.paginatedResults);
 });
 
 // GET a specific home
