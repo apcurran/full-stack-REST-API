@@ -52,7 +52,6 @@ router.get("/:homeId", async (req, res, next) => {
 // POST to create a new home
 router.post("/new", checkAuth, cpUpload, async (req, res, next) => {
     try {
-        console.log(req.files.agent_img[0].path);
         const home = new House({
             price: req.body.price,
             street: req.body.street,
@@ -66,11 +65,11 @@ router.post("/new", checkAuth, cpUpload, async (req, res, next) => {
             squareFeet: req.body.squareFeet,
             description: req.body.description,
             agent: req.body.agent,
-            agent_img: req.files.agent_img[0].path,
+            agent_img: `http://localhost:5000/${req.files.agent_img[0].path}`,
             agent_phone: req.body.agent_phone,
-            house_img_main: req.files.house_img_main[0].path,
-            house_img_inside_1: req.files.house_img_inside_1[0].path,
-            house_img_inside_2: req.files.house_img_inside_2[0].path,
+            house_img_main: `http://localhost:5000/${req.files.house_img_main[0].path}`,
+            house_img_inside_1: `http://localhost:5000/${req.files.house_img_inside_1[0].path}`,
+            house_img_inside_2: `http://localhost:5000/${req.files.house_img_inside_2[0].path}`,
         });
 
         await home.save();
