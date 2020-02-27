@@ -8,7 +8,9 @@ const { check } = require("express-validator");
 const checkAuth = require("../middleware/check-auth");
 const validate = require("../middleware/validate");
 const paginatedResults = require("../middleware/paginatedResults");
+const titleCase = require("../utility/title-case");
 
+// Multer Setup
 const multer = require("multer");
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -34,9 +36,11 @@ router.get("/", paginatedResults(House), async (req, res, next) => {
 // GET a specific home
 router.get("/:homeId", async (req, res, next) => {
     try {
+
         const home = await House.findById(req.params.homeId);
 
         res.json(home);
+
     } catch (err) {
         console.error(err);
         res.json({
@@ -47,10 +51,33 @@ router.get("/:homeId", async (req, res, next) => {
     }
 });
 
+// GET specific homes based on search query
+router.post("/search", async (req, res, next) => {
+    try {
+        
+        // Search by street, city, state, or zip
+        const query = {$or: [
+            { street: titleCase(req.body.searchTerm) },
+            { city: titleCase(req.body.searchTerm) },
+            { state: titleCase(req.body.searchTerm) },
+            { zip: req.body.searchTerm }
+        ]};
+        const homeResults = await House.find(query);
+
+        res.json(homeResults);
+
+    } catch (err) {
+        console.error(err);
+
+        next(err);
+    }
+});
+
 // AUTH protected routes
 
 // POST to create a new home
 router.post("/new", checkAuth, cpUpload, async (req, res, next) => {
+    // Validate first
     try {
         const home = new House({
             price: req.body.price,
