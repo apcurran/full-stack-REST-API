@@ -153,7 +153,9 @@ router.patch("/update", checkAuth, async (req, res, next) => {
 });
 
 // DELTE an existing home
-router.delete("/delete", checkAuth, async (req, res, next) => {
+router.delete("/delete", checkAuth, validate([
+    body("streetQuery").notEmpty().trim()
+]), async (req, res, next) => {
     try {
         const query = { street: req.body.streetQuery };
 
