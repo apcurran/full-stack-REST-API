@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const House = require("../models/House");
-const { check } = require("express-validator");
+const { body } = require("express-validator")
 const checkAuth = require("../middleware/check-auth");
 const validate = require("../middleware/validate");
 const paginatedResults = require("../middleware/paginatedResults");
@@ -79,8 +79,22 @@ router.post("/search", async (req, res, next) => {
 // AUTH protected routes
 
 // POST to create a new home
-router.post("/new", checkAuth, cpUpload, async (req, res, next) => {
-    // Validate first
+router.post("/new", checkAuth, cpUpload, validate([
+    body("price").notEmpty().trim(),
+    body("street").notEmpty().trim(),
+    body("city").notEmpty().trim(),
+    body("state").notEmpty().trim(),
+    body("zip").notEmpty().trim(),
+    body("lat").notEmpty().trim(),
+    body("lon").notEmpty().trim(),
+    body("bedrooms").notEmpty().trim(),
+    body("bathrooms").notEmpty().trim(),
+    body("squareFeet").notEmpty().trim(),
+    body("description").notEmpty().trim(),
+    body("agent").notEmpty().trim(),
+    body("agent_phone").notEmpty().trim(),
+]), async (req, res, next) => {
+
     try {
         const home = new House({
             price: req.body.price,
