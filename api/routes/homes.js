@@ -68,6 +68,9 @@ router.post("/search", async (req, res, next) => {
 
     } catch (err) {
         console.error(err);
+        res.json({
+            error: err
+        });
 
         next(err);
     }
