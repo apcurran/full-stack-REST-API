@@ -52,7 +52,7 @@ router.get("/:homeId", async (req, res, next) => {
     }
 });
 
-// GET specific homes based on search query
+// POST req specific homes based on search query
 router.post("/search", async (req, res, next) => {
     try {
         
