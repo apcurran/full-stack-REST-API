@@ -132,7 +132,7 @@ router.post("/new", checkAuth, cpUpload, validate([
 });
 
 // PATCH an existing home
-router.patch("/update", checkAuth, async (req, res, next) => {
+router.patch("/update", checkAuth, cpUpload, async (req, res, next) => {
     try {
         const query = { street: req.body.streetQuery };
         const updateObject = req.body;
