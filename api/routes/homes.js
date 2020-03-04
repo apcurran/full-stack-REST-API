@@ -10,7 +10,6 @@ const validate = require("../middleware/validate");
 const paginatedResults = require("../middleware/paginatedResults");
 // Utility Functions
 const titleCase = require("../utility/title-case");
-const copyObj = require("../utility/copy-obj");
 
 // Multer Setup
 const multer = require("multer");
@@ -137,7 +136,7 @@ router.post("/new", checkAuth, cpUpload, validate([
 router.patch("/update", checkAuth, cpUpload, async (req, res, next) => {
     try {
         const query = { street: req.body.streetQuery };
-        const updateObject = copyObj(req.body);
+        const updateObject = req.body;
         
         await House.findOneAndUpdate(query, { $set: updateObject });
 
