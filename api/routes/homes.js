@@ -41,7 +41,7 @@ router.get("/:homeId", async (req, res, next) => {
 
         const home = await House.findById(req.params.homeId);
 
-        res.json(home);
+        res.status(200).json(home);
 
     } catch (err) {
         console.error(err);
@@ -66,7 +66,7 @@ router.post("/search", async (req, res, next) => {
         ]};
         const homeResults = await House.find(query);
 
-        res.json(homeResults);
+        res.status(200).json(homeResults);
 
     } catch (err) {
         console.error(err);
@@ -141,7 +141,7 @@ router.patch("/update", checkAuth, cpUpload, async (req, res, next) => {
 
         await House.findOneAndUpdate(query, { $set: updateObject });
 
-        res.json({
+        res.status(201).json({
             message: "Home updated!"
         });
     } catch (err) {

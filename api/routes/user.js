@@ -113,7 +113,7 @@ router.post("/login", validate([
             admin: user.admin
         }
     
-        res.json({
+        res.status(201).json({
             token,
             moddedUser
         });
@@ -138,7 +138,7 @@ router.get("/dashboard", checkAuth, async (req, res, next) => {
             admin: user.admin
         };
 
-        res.json(moddedUser);
+        res.status(200).json(moddedUser);
 
     } catch (err) {
         console.error(err);
@@ -151,7 +151,7 @@ router.get("/favorites", checkAuth, async (req, res, next) => {
         
         const favoriteHomes = await FavoriteHome.find({ user_id: req.user._id });
         
-        res.json(favoriteHomes);
+        res.status(200).json(favoriteHomes);
 
     } catch (err) {
         console.error(err);
