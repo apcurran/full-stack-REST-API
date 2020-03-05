@@ -5,6 +5,8 @@ const app = express();
 const logger = require("morgan");
 const PORT = process.env.PORT || 5000;
 const mongoose = require("mongoose");
+const compression = require("compression");
+const helmet = require("helmet");
 // Initialize dotenv
 require("dotenv").config();
 
@@ -18,6 +20,8 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "mongo connection error"));
 
 app.use(logger("dev"));
+app.use(helmet());
+app.use(compression());
 app.use('/uploads', express.static('uploads'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

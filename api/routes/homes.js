@@ -2,7 +2,6 @@
 
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const House = require("../models/House");
 const { body } = require("express-validator")
 const checkAuth = require("../middleware/check-auth");
