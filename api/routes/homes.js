@@ -163,7 +163,7 @@ router.delete("/delete", checkAuth, validate([
 
         await House.findOneAndRemove(query);
 
-        res.json({
+        res.status(200).json({
             message: "Home deleted!"
         });
     } catch (err) {

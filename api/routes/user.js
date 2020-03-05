@@ -193,7 +193,7 @@ router.delete("/favorites/:homeId", checkAuth, async (req, res, next) => {
 
         await FavoriteHome.findOneAndRemove(query);
 
-        res.json({
+        res.status(200).json({
             message: "Home deleted!"
         });
 
