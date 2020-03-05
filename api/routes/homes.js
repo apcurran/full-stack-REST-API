@@ -110,11 +110,11 @@ router.post("/new", checkAuth, cpUpload, validate([
             squareFeet: req.body.squareFeet,
             description: req.body.description,
             agent: req.body.agent,
-            agent_img: `${process.env.SERVER_URL_PRE}/${req.files.agent_img[0].path}`,
+            agent_img: `${process.env.SERVER_URL_PROD}/${req.files.agent_img[0].path}`,
             agent_phone: req.body.agent_phone,
-            house_img_main: `${process.env.SERVER_URL_PRE}/${req.files.house_img_main[0].path}`,
-            house_img_inside_1: `${process.env.SERVER_URL_PRE}/${req.files.house_img_inside_1[0].path}`,
-            house_img_inside_2: `${process.env.SERVER_URL_PRE}/${req.files.house_img_inside_2[0].path}`,
+            house_img_main: `${process.env.SERVER_URL_PROD}/${req.files.house_img_main[0].path}`,
+            house_img_inside_1: `${process.env.SERVER_URL_PROD}/${req.files.house_img_inside_1[0].path}`,
+            house_img_inside_2: `${process.env.SERVER_URL_PROD}/${req.files.house_img_inside_2[0].path}`,
         });
 
         await home.save();
