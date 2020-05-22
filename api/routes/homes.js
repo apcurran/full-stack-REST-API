@@ -77,7 +77,7 @@ router.post("/search", async (req, res, next) => {
     }
 });
 
-// AUTH protected routes
+// AUTH protected routes //
 
 // POST to create a new home
 router.post("/new", checkAuth, cpUpload, validate([
@@ -153,7 +153,7 @@ router.patch("/update", checkAuth, cpUpload, async (req, res, next) => {
     }
 });
 
-// DELTE an existing home
+// DELETE an existing home
 router.delete("/delete", checkAuth, validate([
     body("streetQuery").notEmpty().trim()
 ]), async (req, res, next) => {
