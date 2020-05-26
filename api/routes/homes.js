@@ -52,16 +52,17 @@ router.get("/:homeId", async (req, res, next) => {
     }
 });
 
-// POST req specific homes based on search query
-router.post("/search", async (req, res, next) => {
+// GET req specific homes based on search query
+router.get("/search/:searchTerm", async (req, res, next) => {
     try {
-        
+
+        const { searchTerm } = req.params;
         // Search by street, city, state, or zip
         const query = {$or: [
-            { street: titleCase(req.body.searchTerm) },
-            { city: titleCase(req.body.searchTerm) },
-            { state: titleCase(req.body.searchTerm) },
-            { zip: req.body.searchTerm }
+            { street: titleCase(searchTerm) },
+            { city: titleCase(searchTerm) },
+            { state: titleCase(searchTerm) },
+            { zip: searchTerm }
         ]};
         const homeResults = await House.find(query);
 
