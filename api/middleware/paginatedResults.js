@@ -10,7 +10,7 @@ module.exports = function(model) {
 
         const results = {};
 
-        if (endIndex < await model.countDocuments().exec()) {
+        if (endIndex < await model.countDocuments().lean().exec()) {
             results.next = {
                 page: page + 1,
                 limit: limit
@@ -30,6 +30,7 @@ module.exports = function(model) {
                 .find()
                 .limit(limit)
                 .skip(startIndex)
+                .lean()
                 .exec();
 
             res.paginatedResults = results;

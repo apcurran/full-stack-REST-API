@@ -38,7 +38,7 @@ router.get("/", paginatedResults(House), async (req, res, next) => {
 router.get("/:homeId", async (req, res, next) => {
     try {
 
-        const home = await House.findById(req.params.homeId);
+        const home = await House.findById(req.params.homeId).lean();
 
         res.status(200).json(home);
 
@@ -64,7 +64,7 @@ router.get("/search/:searchTerm", async (req, res, next) => {
             { state: titleCase(searchTerm) },
             { zip: searchTerm }
         ]};
-        const homeResults = await House.find(query);
+        const homeResults = await House.find(query).lean();
 
         res.status(200).json(homeResults);
 

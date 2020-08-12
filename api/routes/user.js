@@ -19,7 +19,7 @@ router.post("/signup", validate([
     check("secret").trim().escape()
 
 ]), async (req, res, next) => {    
-    const emailExists = await User.findOne({ email: req.body.email });
+    const emailExists = await User.findOne({ email: req.body.email }).lean();
 
     if (emailExists) {
         return res.status(400).json({
@@ -86,7 +86,7 @@ router.post("/login", validate([
 
     try {
         
-        const user = await User.findOne({ email: req.body.email });
+        const user = await User.findOne({ email: req.body.email }).lean();
     
         if (!user) {
             return res.status(400).json({
@@ -129,7 +129,7 @@ router.get("/dashboard", checkAuth, async (req, res, next) => {
     try {
 
         const userId = req.user._id;
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).lean();
         const moddedUser = {
             _id: user._id,
             name: user.name,
@@ -148,7 +148,7 @@ router.get("/dashboard", checkAuth, async (req, res, next) => {
 router.get("/favorites", checkAuth, async (req, res, next) => {
     try {
         
-        const favoriteHomes = await FavoriteHome.find({ user_id: req.user._id });
+        const favoriteHomes = await FavoriteHome.find({ user_id: req.user._id }).lean();
         
         res.status(200).json(favoriteHomes);
 
