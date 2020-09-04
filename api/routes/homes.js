@@ -59,6 +59,12 @@ router.get("/search/:searchTerm", async (req, res, next) => {
         ]};
         const homeResults = await House.find(query).lean();
 
+        if (homeResults.length === 0 || !homeResults) {
+            return res.status(404).json({
+                error: "There are no homes found for your search, please check available homes and try again."
+            });
+        }
+
         res.status(200).json(homeResults);
 
     } catch (err) {
