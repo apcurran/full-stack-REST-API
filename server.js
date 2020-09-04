@@ -43,6 +43,13 @@ app.use((req, res, next) => {
 app.use("/user", userRouter);
 app.use("/homes", homesRouter);
 
+// General Server Error Handling
+app.use((err, req, res, next) => {
+    console.error(err.message);
+
+    return res.status(500).json({ error: err.message });
+});
+
 // Handle 404 Error
 app.use((req, res, next) => {
     const error = new Error("Not found");

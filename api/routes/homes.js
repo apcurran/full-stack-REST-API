@@ -37,17 +37,11 @@ router.get("/", paginatedResults(House), async (req, res, next) => {
 // GET a specific home
 router.get("/:homeId", async (req, res, next) => {
     try {
-
         const home = await House.findById(req.params.homeId).lean();
 
         res.status(200).json(home);
 
     } catch (err) {
-        console.error(err);
-        res.json({
-            message: err
-        });
-
         next(err);
     }
 });
@@ -55,7 +49,6 @@ router.get("/:homeId", async (req, res, next) => {
 // GET req specific homes based on search query
 router.get("/search/:searchTerm", async (req, res, next) => {
     try {
-
         const { searchTerm } = req.params;
         // Search by street, city, state, or zip
         const query = {$or: [
@@ -69,11 +62,6 @@ router.get("/search/:searchTerm", async (req, res, next) => {
         res.status(200).json(homeResults);
 
     } catch (err) {
-        console.error(err);
-        res.json({
-            error: err
-        });
-
         next(err);
     }
 });
@@ -124,11 +112,6 @@ router.post("/new", checkAuth, cpUpload, validate([
             message: "New home created!"
         });
     } catch (err) {
-        console.error(err);
-        res.json({
-            error: err
-        });
-
         next(err);
     }
 });
@@ -145,11 +128,6 @@ router.patch("/update", checkAuth, cpUpload, async (req, res, next) => {
             message: "Home updated!"
         });
     } catch (err) {
-        console.error(err);
-        res.json({
-            error: err
-        });
-
         next(err);
     }
 });
@@ -167,11 +145,6 @@ router.delete("/delete", checkAuth, validate([
             message: "Home deleted!"
         });
     } catch (err) {
-        console.error(err);
-        res.json({
-            error: err
-        });
-
         next(err);
     }
 });

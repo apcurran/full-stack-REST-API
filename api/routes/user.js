@@ -28,7 +28,6 @@ router.post("/signup", validate([
     }
 
     try { 
-
         // Hash password
         const saltRounds = 12;
         const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
@@ -66,11 +65,6 @@ router.post("/signup", validate([
     
 
     } catch (err) {
-        console.error(err);
-        res.json({
-            error: err
-        });
-        
         next(err);
     }
 });
@@ -85,7 +79,6 @@ router.post("/login", validate([
     // Check if user exists
 
     try {
-        
         const user = await User.findOne({ email: req.body.email }).lean();
     
         if (!user) {
@@ -119,7 +112,6 @@ router.post("/login", validate([
 
 
     } catch (err) {
-        console.error(err);
         next(err);
     }
 
@@ -127,7 +119,6 @@ router.post("/login", validate([
 
 router.get("/dashboard", checkAuth, async (req, res, next) => {
     try {
-
         const userId = req.user._id;
         const user = await User.findById(userId).lean();
         const moddedUser = {
@@ -140,27 +131,23 @@ router.get("/dashboard", checkAuth, async (req, res, next) => {
         res.status(200).json(moddedUser);
 
     } catch (err) {
-        console.error(err);
         next(err);
     }
 });
 
 router.get("/favorites", checkAuth, async (req, res, next) => {
     try {
-        
         const favoriteHomes = await FavoriteHome.find({ user_id: req.user._id }).lean();
         
         res.status(200).json(favoriteHomes);
 
     } catch (err) {
-        console.error(err);
         next(err);
     }
 });
 
 router.post("/favorites", checkAuth, async (req, res, next) => {
     try {
-        
         const favoriteHome = new FavoriteHome({
             user_id: req.user._id,
             home_id: req.body.home_id,
@@ -180,14 +167,12 @@ router.post("/favorites", checkAuth, async (req, res, next) => {
         });
 
     } catch (err) {
-        console.error(err);
         next(err);
     }
 });
 
 router.delete("/favorites/:homeId", checkAuth, async (req, res, next) => {
     try {
-        
         const query = { user_id: req.user._id, home_id: req.params.homeId }
 
         await FavoriteHome.findOneAndRemove(query);
@@ -197,7 +182,6 @@ router.delete("/favorites/:homeId", checkAuth, async (req, res, next) => {
         });
 
     } catch (err) {
-        console.error(err);
         next(err);
     }
 });
