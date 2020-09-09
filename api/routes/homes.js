@@ -50,11 +50,12 @@ router.get("/:homeId", async (req, res, next) => {
 router.get("/search/:searchTerm", async (req, res, next) => {
     try {
         const { searchTerm } = req.params;
+        const titleCasedSearchTerm = titleCase(searchTerm);
         // Search by street, city, state, or zip
         const query = {$or: [
-            { street: titleCase(searchTerm) },
-            { city: titleCase(searchTerm) },
-            { state: titleCase(searchTerm) },
+            { street: titleCasedSearchTerm },
+            { city: titleCasedSearchTerm },
+            { state: titleCasedSearchTerm },
             { zip: searchTerm }
         ]};
         const homeResults = await House.find(query).lean();
