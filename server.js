@@ -57,6 +57,7 @@ app.use((req, res, next) => {
 
     next(error);
 });
+
 // Catch other errors
 app.use((err, req, res, next) => {
     res.status(err.status || 500);
