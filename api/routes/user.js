@@ -95,7 +95,9 @@ router.post("/login", validate([
             });
         }
     
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" }, (err, token) => {
+            if (err) console.error(err);
+        });
     
         // Remove password before sending back to client
         const moddedUser = {
