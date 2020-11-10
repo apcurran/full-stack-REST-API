@@ -6,7 +6,7 @@ const House = require("../models/House");
 const { body } = require("express-validator")
 const checkAuth = require("../middleware/check-auth");
 const validate = require("../middleware/validate");
-const paginatedResults = require("../middleware/paginatedResults");
+const paginatedResults = require("../middleware/paginated-results");
 // Utility Functions
 const reviseObjImgPaths = require("../utility/revise-obj-img-paths");
 
