@@ -8,7 +8,6 @@ const checkAuth = require("../middleware/check-auth");
 const validate = require("../middleware/validate");
 const paginatedResults = require("../middleware/paginatedResults");
 // Utility Functions
-const titleCase = require("../utility/title-case");
 const reviseObjImgPaths = require("../utility/revise-obj-img-paths");
 
 // Multer Setup
@@ -50,15 +49,14 @@ router.get("/:homeId", async (req, res, next) => {
 router.get("/search/:searchTerm", async (req, res, next) => {
     try {
         const { searchTerm } = req.params;
-        const titleCasedSearchTerm = titleCase(searchTerm);
         // Search by street, city, state, or zip
         const query = {$or: [
-            { street: titleCasedSearchTerm },
-            { city: titleCasedSearchTerm },
-            { state: titleCasedSearchTerm },
+            { street: searchTerm },
+            { city: searchTerm },
+            { state: searchTerm },
             { zip: searchTerm }
         ]};
-        const homeResults = await House.find(query).lean();
+        const homeResults = await House.find(query).collation({ locale: "en", strength: 2 }).lean();
 
         if (homeResults.length === 0 || !homeResults) {
             return res.status(404).json({
