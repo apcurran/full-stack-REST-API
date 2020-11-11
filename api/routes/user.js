@@ -40,7 +40,6 @@ router.post("/signup", validate([
                 name: req.body.name,
                 email: req.body.email,
                 password: hashedPassword,
-                secret: req.body.secret,
                 admin: true
             });
     
@@ -80,7 +79,7 @@ router.post("/login", validate([
 
     try {
         const user = await User.findOne({ email: req.body.email }).lean();
-    
+
         if (!user) {
             return res.status(400).json({
                 error: "Email not found"
@@ -120,15 +119,9 @@ router.post("/login", validate([
 router.get("/dashboard", checkAuth, async (req, res, next) => {
     try {
         const userId = req.user._id;
-        const user = await User.findById(userId).lean();
-        const moddedUser = {
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            admin: user.admin
-        };
+        const user = await User.findById(userId).select("-password").lean();
 
-        res.status(200).json(moddedUser);
+        res.status(200).json(user);
 
     } catch (err) {
         next(err);
