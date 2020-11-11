@@ -56,6 +56,7 @@ router.get("/search/:searchTerm", async (req, res, next) => {
             { state: searchTerm },
             { zip: searchTerm }
         ]};
+        // Collation allows for case-insensitive search query
         const homeResults = await House.find(query).collation({ locale: "en", strength: 2 }).lean();
 
         if (homeResults.length === 0 || !homeResults) {
@@ -75,6 +76,7 @@ router.get("/search/:searchTerm", async (req, res, next) => {
 
 // POST to create a new home
 router.post("/new", checkAuth, cpUpload, validate([
+
     body("price").notEmpty().trim(),
     body("street").notEmpty().trim(),
     body("city").notEmpty().trim(),
@@ -87,7 +89,8 @@ router.post("/new", checkAuth, cpUpload, validate([
     body("squareFeet").notEmpty().trim(),
     body("description").notEmpty().trim(),
     body("agent").notEmpty().trim(),
-    body("agent_phone").notEmpty().trim(),
+    body("agent_phone").notEmpty().trim()
+
 ]), async (req, res, next) => {
 
     try {
@@ -139,7 +142,9 @@ router.patch("/update", checkAuth, cpUpload, async (req, res, next) => {
 
 // DELETE an existing home
 router.delete("/delete", checkAuth, validate([
+
     body("streetQuery").notEmpty().trim()
+    
 ]), async (req, res, next) => {
     try {
         const query = { street: req.body.streetQuery };
