@@ -19,7 +19,10 @@ mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "mongo connection error"));
 
-app.use(logger("dev"));
+if (process.env.NODE_ENV !== "production") {
+    app.use(logger("dev"));
+}
+
 app.use(helmet());
 app.use(compression());
 app.use('/uploads', express.static('uploads'));
