@@ -15,8 +15,8 @@ const fetch = require("node-fetch");
 
 var mongoose = require('mongoose');
 var mongoDB = userArgs[0];
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
-// mongoose.Promise = global.Promise;
+const mongoConnection = mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
@@ -63,7 +63,7 @@ async function populateDb() {
     
         await Promise.all(homeArrPromises);
         console.log("DB populated!");
-        return;
+        mongoConnection.disconnect();
         
     } catch (err) {
         console.error(err);
