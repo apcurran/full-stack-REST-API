@@ -50,14 +50,19 @@ router.get("/search/:searchTerm", async (req, res, next) => {
     try {
         const { searchTerm } = req.params;
         // Search by street, city, state, or zip
-        const query = {$or: [
-            { street: searchTerm },
-            { city: searchTerm },
-            { state: searchTerm },
-            { zip: searchTerm }
-        ]};
+        // const query = {$or: [
+        //     { street: searchTerm },
+        //     { city: searchTerm },
+        //     { state: searchTerm },
+        //     { zip: searchTerm }
+        // ]};
+        // updated query with text index
+        const query = {
+            $text: { $search: searchTerm }
+        };
         // Collation allows for case-insensitive search query
         const homeResults = await House.find(query).collation({ locale: "en", strength: 2 }).lean();
+        console.log(homeResults);
 
         if (homeResults.length === 0 || !homeResults) {
             return res.status(404).json({
