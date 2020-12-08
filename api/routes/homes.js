@@ -3,7 +3,8 @@
 const express = require("express");
 const router = express.Router();
 const House = require("../models/House");
-const { body } = require("express-validator")
+const { body } = require("express-validator");
+const sanitizeHtml = require('sanitize-html');
 const checkAuth = require("../middleware/check-auth");
 const validate = require("../middleware/validate");
 const paginatedResults = require("../middleware/paginated-results");
@@ -48,11 +49,11 @@ router.get("/:homeId", async (req, res, next) => {
 // GET req specific homes based on search query
 router.get("/search/:searchTerm", async (req, res, next) => {
     try {
-        const { searchTerm } = req.params;
+        const cleanSearchTerm = sanitizeHtml(req.params.searchTerm);
         // Search by street, city, state, or zip
         // updated query with text index
         const query = (
-            { $text: { $search: searchTerm } }
+            { $text: { $search: cleanSearchTerm } }
         );
         const homeResults = await House.find(query)
                                        .select({ score: { $meta: "textScore" } })
@@ -128,7 +129,8 @@ router.post("/new", checkAuth, cpUpload, validate([
 // PATCH an existing home
 router.patch("/update", checkAuth, cpUpload, async (req, res, next) => {
     try {
-        const query = { street: req.body.streetQuery };
+        const cleanStreetQuery = sanitizeHtml(req.body.streetQuery);
+        const query = { street: cleanStreetQuery };
         const updateObject = reviseObjImgPaths(req.files, req, req.body);
 
         await House.findOneAndUpdate(query, { $set: updateObject });

@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const FavoriteHome = require("../models/FavoriteHome");
 const jwt = require("jsonwebtoken");
+const sanitizeHtml = require('sanitize-html');
 const { check } = require("express-validator");
 const validate = require("../middleware/validate");
 const checkAuth = require("../middleware/check-auth");
@@ -166,7 +167,8 @@ router.post("/favorites", checkAuth, async (req, res, next) => {
 
 router.delete("/favorites/:homeId", checkAuth, async (req, res, next) => {
     try {
-        const query = { user_id: req.user._id, home_id: req.params.homeId }
+        const cleanHomeId = sanitizeHtml(req.params.homeId);
+        const query = { user_id: req.user._id, home_id: cleanHomeId };
 
         await FavoriteHome.findOneAndRemove(query);
 
