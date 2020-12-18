@@ -3,6 +3,7 @@
 const express = require("express");
 const app = express();
 const logger = require("morgan");
+const cors = require("cors");
 const PORT = process.env.PORT || 5000;
 const mongoose = require("mongoose");
 const compression = require("compression");
@@ -29,18 +30,19 @@ app.use('/uploads', express.static('uploads'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Handle CORS
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://billow-client.firebaseapp.com");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+app.use(cors());
+// app.use((req, res, next) => {
+//     res.header("Access-Control-Allow-Origin", "https://billow-client.firebaseapp.com");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
-    if (req.method === "OPTIONS") {
-        res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+//     if (req.method === "OPTIONS") {
+//         res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
 
-        return res.status(200).json({});
-    }
+//         return res.status(200).json({});
+//     }
 
-    next();
-});
+//     next();
+// });
 
 // Routes
 app.use("/user", userRouter);
