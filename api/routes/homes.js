@@ -49,6 +49,7 @@ router.get("/:homeId", async (req, res, next) => {
 // GET req specific homes based on search query
 router.get("/search/:searchTerm", async (req, res, next) => {
     try {
+        console.log("req.query is", req.query);
         const cleanSearchTerm = sanitizeHtml(req.params.searchTerm);
         // Search by street, city, state, or zip
         // updated query with text index
