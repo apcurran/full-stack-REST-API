@@ -2,9 +2,11 @@
 
 const express = require("express");
 const router = express.Router();
-const House = require("../models/House");
 const { body } = require("express-validator");
 const sanitizeHtml = require('sanitize-html');
+
+const House = require("../models/House");
+const redisClient = require("../../redis/index");
 const checkAuth = require("../middleware/check-auth");
 const validate = require("../middleware/validate");
 const paginatedResults = require("../middleware/paginated-results");
@@ -37,6 +39,7 @@ router.get("/", paginatedResults(House), async (req, res, next) => {
 // GET a specific home
 router.get("/:homeId", async (req, res, next) => {
     try {
+        const { homeId } = req.params;
         const home = await House.findById(req.params.homeId).lean();
 
         res.status(200).json(home);
