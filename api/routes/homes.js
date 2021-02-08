@@ -40,7 +40,21 @@ router.get("/", paginatedResults(House), async (req, res, next) => {
 router.get("/:homeId", async (req, res, next) => {
     try {
         const { homeId } = req.params;
-        const home = await House.findById(req.params.homeId).lean();
+        const cacheKey = `home-${homeId}`;
+
+        let cacheEntry = await redisClient.get(cacheKey);
+
+        if (cacheEntry) {
+            cacheEntry = JSON.parse(cacheEntry);
+
+            return res.status(200).send(cacheEntry);
+        }
+
+        // Get from db
+        const home = await House.findById(homeId).lean();
+
+        // Set to Redis cache
+        redisClient.set(cacheKey, JSON.stringify(home), "EX", 86400);
 
         res.status(200).json(home);
 
