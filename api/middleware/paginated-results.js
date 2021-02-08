@@ -25,7 +25,6 @@ module.exports = function(model) {
         }
 
         try {
-
             results.results = await model
                 .find()
                 .limit(limit)
