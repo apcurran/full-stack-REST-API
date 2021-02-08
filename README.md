@@ -19,3 +19,5 @@
 * Express-Validator used for validation on server side
 
 * Populate DB mini-program written to pre-populate the db with fake data, using the Faker npm package
+
+* Implemented Redis as a caching layer for /homes/:homeId route, as a proof of concept for this feature to be added in a production site
