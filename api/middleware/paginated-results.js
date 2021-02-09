@@ -28,7 +28,7 @@ module.exports = function(model) {
             }
             
             // Redis key
-            const cacheKey = `homes:results:page:${page}`;
+            const cacheKey = `homes:results:page:${page}:limit:${limit}`;
             let cacheEntry = await redisClient.get(cacheKey);
 
             if (cacheEntry) {
