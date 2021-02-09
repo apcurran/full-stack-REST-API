@@ -40,7 +40,7 @@ router.get("/", paginatedResults(House), async (req, res, next) => {
 router.get("/:homeId", async (req, res, next) => {
     try {
         const { homeId } = req.params;
-        const cacheKey = `home-${homeId}`;
+        const cacheKey = `home:${homeId}`;
 
         let cacheEntry = await redisClient.get(cacheKey);
 
