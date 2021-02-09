@@ -55,7 +55,6 @@ module.exports = function(model) {
             next();
 
         } catch (err) {
-            console.error(err);
             next(err);
         }
     };
